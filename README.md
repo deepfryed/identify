@@ -18,7 +18,7 @@ require 'identify'
 p Identify.image File.binread("test/images/test.png", 1024)
 ```
 
-Output:
+### Output
 
 ```
 {:width=>253, :height=>178, :format=>"png"}
