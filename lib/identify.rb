@@ -1,5 +1,5 @@
 module Identify
-  VERSION = '0.1.0'
+  VERSION = '0.1.1'
 
   def self.image data
     Image.identify(data)
@@ -125,7 +125,7 @@ module Identify
 
     class GIF < Image
       def self.handle? data
-        data.index("GIF89a") == 0 || data.index("GIF87a")
+        data.start_with?("GIF89a", "GIF87a")
       end
 
       def parse data
@@ -140,7 +140,7 @@ module Identify
 
       def parse data
         {}.tap do |meta|
-          meta.merge! as_hash('png', *data.unpack("x16NN")) if data.index("IHDR") == 12
+          meta.merge! as_hash('png', *data.unpack("x16NN")) if data[12..15] == "IHDR"
         end
       end
     end # PNG

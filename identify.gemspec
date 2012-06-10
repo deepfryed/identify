@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = "identify"
-  s.version = "0.1.0"
+  s.version = "0.1.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Bharanee Rathna"]
-  s.date = "2012-06-07"
+  s.date = "2012-06-10"
   s.description = "Image identification in pure Ruby"
   s.email = ["deepfryed@gmail.com"]
   s.files = ["lib/identify.rb", "README.md", "CHANGELOG"]
