@@ -23,7 +23,7 @@ module Identify
       new.parse data
     end
 
-    def as_hash format, width, height
+    def as_hash format, width = nil, height = nil
       {width: width.to_i, height: height.to_i, format: format}
     end
 
@@ -54,10 +54,13 @@ module Identify
       end
 
       def parse data
+        # not enough header data to parse
+        return {} if data.bytesize < 8
+
         endian  = data[0..1] == "MM" ? 'n' : 'v'
         # IFD offset
         offset  = data.unpack("x4#{endian.upcase}").first
-        # Don't have enough header data
+        # don't have enough header data
         return {} if data.bytesize < offset + 14
 
         nrec    = data[offset, 2].unpack(endian).first
@@ -129,7 +132,7 @@ module Identify
       end
 
       def parse data
-        as_hash('gif', *data.unpack("x6vv"))
+        data.bytesize > 10 ? as_hash('gif', *data.unpack("x6vv")) : {}
       end
     end # GIF
 
@@ -140,7 +143,7 @@ module Identify
 
       def parse data
         {}.tap do |meta|
-          meta.merge! as_hash('png', *data.unpack("x16NN")) if data[12..15] == "IHDR"
+          meta.merge! as_hash('png', *data.unpack("x16NN")) if data.bytesize > 24 && data[12..15] == "IHDR"
         end
       end
     end # PNG
@@ -150,7 +153,7 @@ module Identify
       SOF = [0xc0, 0xc1, 0xc2, 0xc3, 0xc5, 0xc6, 0xc7, 0xc9, 0xca, 0xcb, 0xcd, 0xce, 0xcf]
 
       def self.handle? data
-        data.index("JFIF", 4) == 6
+        data[6..9] == "JFIF"
       end
 
       def parse data
