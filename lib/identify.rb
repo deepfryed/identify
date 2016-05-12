@@ -1,5 +1,6 @@
+# encoding: ascii-8bit
 module Identify
-  VERSION = '0.1.1'
+  VERSION = '0.1.2'
 
   def self.image data
     Image.identify(data)
@@ -137,8 +138,10 @@ module Identify
     end # GIF
 
     class PNG < Image
+      SIGNATURE = "\x89\x50\x4E\x47\x0D\x0A\x1A\x0A"
+
       def self.handle? data
-        data[0..7] == "\x89\x50\x4E\x47\x0D\x0A\x1A\x0A" # png 8-byte signature
+        data[0..7] == SIGNATURE
       end
 
       def parse data
@@ -152,8 +155,11 @@ module Identify
       # http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/JPEG.html#SOF
       SOF = [0xc0, 0xc1, 0xc2, 0xc3, 0xc5, 0xc6, 0xc7, 0xc9, 0xca, 0xcb, 0xcd, 0xce, 0xcf]
 
+      # exif
+      SOI = [0xff, 0xd8, 0xff, 0xe1]
+
       def self.handle? data
-        data[6..9] == "JFIF"
+        data[6..9] == "JFIF" || data[0..3].bytes == SOI
       end
 
       def parse data

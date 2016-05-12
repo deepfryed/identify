@@ -5,7 +5,7 @@ require 'minitest/autorun'
 describe 'Identify' do
   def magick file
     format, width, height = %x{identify #{file}}.split(/\s+/)[1..2].map {|v| v.split(/(?<=\d)x/)}.flatten
-    {width: width.to_i, height: height.to_i, format: format.downcase}
+    {width: width.to_i, height: height.to_i, format: format.downcase.sub(%r{bmp3}, 'bmp')}
   end
 
   Dir[File.dirname(__FILE__) + '/images/*'].each do |file|
