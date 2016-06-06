@@ -16,12 +16,9 @@ module Identify
     end
 
     def self.identify data
+      data.force_encoding('ASCII-8BIT')
       format = formats.find {|klass| klass.handle? data}
-      format ? format.parse(data) : {}
-    end
-
-    def self.parse data
-      new.parse data
+      format ? format.new.parse(data) : {}
     end
 
     def as_hash format, width = nil, height = nil

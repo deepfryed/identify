@@ -1,6 +1,10 @@
+require 'bundler/setup'
+
 require 'identify'
-require 'minitest/pretty'
 require 'minitest/autorun'
+require 'minitest/reporters'
+
+Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new
 
 describe 'Identify' do
   def magick file
